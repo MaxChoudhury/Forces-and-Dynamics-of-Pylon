@@ -6,11 +6,11 @@ clear; clc;
 
 %% Define Parameters
 % Thrust force (set to numeric value)
-Fthrust = 100;  % Thrust force in kN (numeric value)
+Fthrust = 1000;  % Thrust force in kN (numeric value)
 % Wave loading (input as needed)
-Fwave = 10;     % Wave force in kN (numeric value)
+Fwave = 100;     % Wave force in kN (numeric value)
 % Wind loading (input as needed)
-Fwind = 8;     % Wind force in kN (numeric value; can be modified)
+Fwind = 80;     % Wind force in kN (numeric value; can be modified)
 
 % Height above sea level
 H = 80;          % Height above sea level in meters (numeric value)
@@ -34,9 +34,9 @@ I = calculate_tower_properties();       % Moment of inertia in m^4 for the tower
 
 %% Display Results
 fprintf('Reaction forces and moments at the seabed (Point A):\n');
-fprintf('Horizontal reaction force (H_a): %g kN\n', double(H_a) / 1000);  % Convert N to kN for display
-fprintf('Vertical reaction force (V_a): %g kN\n', double(V_a) / 1000);  % Convert N to kN for display
-fprintf('Moment reaction (M_a): %g kNm\n', double(M_a) / 1000);  % Convert Nm to kNm for display
+fprintf('Horizontal reaction force (H_a): %g kN\n', H_a / 1000);  % Convert N to kN for display
+fprintf('Vertical reaction force (V_a): %g kN\n', V_a / 1000);  % Convert N to kN for display
+fprintf('Moment reaction (M_a): %g kNm\n', M_a / 1000);  % Convert Nm to kNm for display
 
 fprintf('Displacement at sea level (Point B): %g m\n', x_b);
 fprintf('Displacement at the top of the pylon (Point C): %g m\n', x_c);
