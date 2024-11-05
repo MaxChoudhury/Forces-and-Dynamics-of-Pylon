@@ -40,14 +40,9 @@ for i = 1:num_cases
     [H_a, V_a, M_a] = calculate_reactions(Fthrust * 1000, Fwave * 1000, Fwind * 1000, weight_C, H, h);  % Convert kN to N
     
     % Store the results
-    H_a_results(i) = H_a;
-    V_a_results(i) = V_a;
-    M_a_results(i) = M_a; 
-
-% Store the results
-H_a_results(i) = H_a / 1000;  % Convert to kN
-V_a_results(i) = V_a / 1000;  % Convert to kN
-M_a_results(i) = M_a / 1000;  % Convert to kNm
+    H_a_results(i) = H_a / 1000;  % Convert to kN
+    V_a_results(i) = V_a / 1000;  % Convert to kN
+    M_a_results(i) = M_a / 1000;  % Convert to kNm
 end
 
 %% Plot the results
@@ -69,3 +64,21 @@ plot(Fthrust_range, M_a_results, 'b');
 title('Moment M_a vs Thrust Force');
 xlabel('Thrust Force (kN)');
 ylabel('M_a (kNm)');
+
+%% Calculate reactions and displacements for a specific thrust force
+specific_Fthrust = 2000;  % Specific thrust force in kN
+[H_a_specific, V_a_specific, M_a_specific] = calculate_reactions(specific_Fthrust * 1000, Fwave * 1000, Fwind * 1000, weight_C, H, h);  % Convert kN to N
+[x_b, x_c] = calculate_displacements(H, h, specific_Fthrust * 1000, Fwave * 1000, Fwind * 1000, weight_C, E, I);  % Convert kN to N
+
+% Convert results to kN and kNm
+H_a_specific = H_a_specific / 1000;  % Convert to kN
+V_a_specific = V_a_specific / 1000;  % Convert to kN
+M_a_specific = M_a_specific / 1000;  % Convert to kNm
+
+% Display the results
+fprintf('For a thrust force of %d kN:\n', specific_Fthrust);
+fprintf('Horizontal Reaction Force H_a: %.2f kN\n', H_a_specific);
+fprintf('Vertical Reaction Force V_a: %.2f kN\n', V_a_specific);
+fprintf('Moment M_a: %.2f kNm\n', M_a_specific);
+fprintf('Displacement at sea level (x_b): %.3f m\n', x_b);
+fprintf('Displacement at top of the tower (x_c): %.3f m\n', x_c);
