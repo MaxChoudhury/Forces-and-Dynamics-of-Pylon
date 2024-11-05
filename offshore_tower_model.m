@@ -6,16 +6,16 @@ clear; clc;
 
 %% Define Parameters
 % Thrust force (set to numeric value)
-Fthrust = 1000;  % Thrust force in kN (numeric value)
+Fthrust = 2000;  % Thrust force in kN (numeric value)
 % Wave loading (input as needed)
 Fwave = 100;     % Wave force in kN (numeric value)
 % Wind loading (input as needed)
 Fwind = 80;     % Wind force in kN (numeric value; can be modified)
 
 % Height above sea level
-H = 80;          % Height above sea level in meters (numeric value)
+H = 100;          % Height above sea level in meters (numeric value)
 % Depth below sea level
-h = 20;          % Depth below sea level in meters (numeric value)
+h = 60;          % Depth below sea level in meters (numeric value)
 
 % Define mass at point C
 mass_C = 10;  % Mass in tonnes
