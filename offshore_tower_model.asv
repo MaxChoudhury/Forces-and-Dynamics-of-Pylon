@@ -1,17 +1,13 @@
 %% Main Script - offshore_tower_model.m
-% Model which calculates and displays the bending of the tower, as well as
-% returning key outputs such as reaction forces and displacements.
-
-% Clear workspace and command window
-clear; clc;
+%
 
 %% Input Parameters
-F = 2000e3;   % Applied force at the top of the tower (Kn to N by e3)
+F = 200e3;   % Applied force at the top of the tower (Kn to N by e3)
 
 % Beam properties
 EI = calculate_tower_properties();  % Flexural rigidity EI from calculate_tower_properties
 
-k = 1e8;      % Rotational spring stiffness (N·m/radian)
+k = 1e5;      % Rotational spring stiffness (N·m/radian)
 H = 80;       % Height above sea level (in meters)
 h = 60;       % Height below sea level (in meters)
 
