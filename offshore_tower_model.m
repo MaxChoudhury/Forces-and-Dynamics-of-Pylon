@@ -19,7 +19,7 @@ L = H + h;    % Total Length of tower
 k = 1e10;      % Rotational spring stiffness (N·m/radian)
 
 % Call function to calculate reactions and displacements
-[H_a, V_a, M_a, initial_displacement, deflection_y, M_y] = ...
+[H_a, V_a, M_a,  deflection_c, deflection_b, deflection_y, M_y] = ...
     calculate_reactions_and_displacements(F_thrust, tower_mass, EI, k, H, h, L, g);
 
 %% Display Results in the Command Window
@@ -27,13 +27,14 @@ fprintf('\n--- Tower Reaction and Displacement Results ---\n');
 fprintf('Horizontal reaction at base (H_a): %.2f kN\n', H_a / 1000);  % Convert N to kN
 fprintf('Vertical reaction at base (V_a): %.2f kN\n', V_a / 1000);  % Convert N to kN
 fprintf('Moment reaction (M_a): %.2f kNm\n', M_a / 1000);  % Convert Nm to kNm
-fprintf('Initial Displacement at Tip (without mass): %.4f m\n', initial_displacement);
+fprintf('Initial Displacement at Sea Level (without mass): %.4f m\n', deflection_b);
+fprintf('Initial Displacement at Tip (without mass): %.4f m\n', deflection_c);
 
 fprintf('\n');  % Blank line for readability
 
 %% Plotting Deflection (Height vs Displacement) and Bending Moment Diagram
 % Define y positions along the tower from seabed to tip
-y = linspace(0, L, 100);  % From seabed to tip (total height)
+y = linspace(0, L, L+1);  % From seabed to tip (total height)
 
 % Create a figure with two subplots
 figure;
