@@ -1,31 +1,46 @@
-function [H_a, V_a, M_a, max_deflection_b, max_deflection_c, max_moment] = calculate_reactions_and_displacements(F, EI, k, H, h)
+function [H_a, V_a, M_a, max_deflection_b, max_deflection_c, max_moment] = calculate_reactions_and_displacements(F_thrust, F_mass, EI, k, H, h, L, tower_mass, g)
     % Calculates reaction forces, deflections, and maximum bending moment for the tower
-    % with a pin joint and spring at the base.
-    
-    % Define total length of the tower
-    L = H + h;  % Total length of the beam (above and below sea level)
+    % with a pin joint and spring at the base
 
-    % Reaction Forces at the Base (Pin Joint with Rotational Spring)
-    H_a = -F;           % Horizontal reaction force at the base (equal to applied force at tip)
-    V_a = 0;            % Vertical reaction force (assumed zero in this 2D horizontal loading model)
-    
-    % Moment at the base (resisted entirely by the spring)
-    M_a = F * L;
-    M_spring = M_a;     % Moment resisted by the spring
+    %% Reaction Forces at the Base (Pin Joint with Rotational Spring)
+    H_a = -F_thrust;  % Horizontal reaction force at the base (equal to applied force at tip)
+    V_a = F_mass + (tower_mass * g);  % Vertical reaction force (Equal to weight of point mass plus weight of tower)
 
-    % Calculate the maximum bending moment along the beam
+    %% Initial Moment at the base (resisted entirely by the spring)
+    M_a = F_thrust * L;  % Initial moment due to thrust force
+    M_spring = M_a;  % Moment resisted by the spring
+
+    %% Iteratively solve for the new moment and displacement
+    tolerance = 1e-6;  % Convergence tolerance
+    max_iterations = 100;  % Maximum number of iterations
+    displacement_tip = 0;  % Initial displacement at the tip
+    for iter = 1:max_iterations
+        % Calculate the moment due to the point mass acting at the displaced position
+        moment_due_to_mass = F_mass * displacement_tip;
+
+        % Total moment at the base
+        M_a_new = F_thrust * L + moment_due_to_mass;
+
+        % Calculate the new displacement at the tip
+        displacement_tip_new = (M_a_new * L) / (3 * EI) + (M_a_new) / k;
+
+        % Check for convergence
+        if abs(displacement_tip_new - displacement_tip) < tolerance
+            displacement_tip = displacement_tip_new;
+            M_a = M_a_new;
+            break;
+        end
+
+        % Update displacement for the next iteration
+        displacement_tip = displacement_tip_new;
+    end
+
+    %% Calculate the maximum bending moment along the beam
     y = linspace(0, L, 100);  % Positions along the beam from base (A) to tip (C)
-    M_y = F * (L - y);        % Moment at each point along the beam
-    max_moment = max(abs(M_y)); % Maximum bending moment along the beam
+    M_y = F_thrust * (L - y) + F_mass * displacement_tip;  % Moment at each point along the beam
+    max_moment = max(abs(M_y));  % Maximum bending moment along the beam
 
-    % Calculate deflection at sea level (Point B) and at the tip (Point C)
-    deflection_b_cantilever = (F * h^3) / (3 * EI);  % Cantilever deflection at Point B
-    deflection_b_spring = (F * h) / k;               % Spring deflection at Point B
-    max_deflection_b = deflection_b_cantilever + deflection_b_spring;  % Total deflection at Point B
-
-    deflection_c_cantilever = (F * L^3) / (3 * EI);  % Cantilever deflection at Point C
-    deflection_c_spring = (F * L) / k;               % Spring deflection at Point C
-    max_deflection_c = deflection_c_cantilever + deflection_c_spring;  % Total deflection at Point C
+    %% Calculate deflection at sea level (Point B) and at the tip (Point C)
+    max_deflection_b = (F_thrust * h^2) / (2 * EI) + (F_thrust * h) / k;  % Deflection at sea level (B)
+    max_deflection_c = displacement_tip;  % Deflection at the tip (C)
 end
-
-
