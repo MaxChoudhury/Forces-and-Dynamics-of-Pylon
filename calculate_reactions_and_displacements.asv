@@ -14,8 +14,8 @@ function [H_a, V_a, M_a, initial_displacement, deflection_y, M_y] = calculate_re
 
     %% Calculate the bending moment along the beam for the initial state
     y = linspace(0, L, 100);  % Positions along the beam from base (A) to tip (C)
-    M_y = F_thrust * (L-y);  % Moment at each point along the beam
+    M_y = F_thrust * y;  % Moment at each point along the beam
 
     %% Calculate deflection along the beam for the initial state
-    deflection_y = ((F_thrust * (y.^3)) / (3 * EI)) + ((F_thrust * y.^2) / k);  % Deflection along the beam (in meters)
+    deflection_y = (F_thrust * y.^3) / (3 * EI) + (F_thrust * y) / k;  % Deflection along the beam (in meters)
 end
